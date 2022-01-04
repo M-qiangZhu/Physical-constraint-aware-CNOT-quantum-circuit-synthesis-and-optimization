@@ -87,9 +87,9 @@ class CNOT_tracker(Circuit):
         return new_circuit
 
     def update_matrix(self):
-        self.matrix = Mat2(np.identity(self.n_qubits))  
+        self.matrix = Mat2(np.identity(self.n_qubits))  # 返回一个 n_qubits * n_qubits 的矩阵
         for gate in self.gates:
-            if hasattr(gate, "name") and gate.name == "CNOT":  
+            if hasattr(gate, "name") and gate.name == "CNOT":  # hasattr() 函数用于判断对象是否包含对应的属性
                 self.matrix.row_add(gate.control, gate.target)
             else:
                 print("Warning: CNOT tracker can only be used for circuits with only CNOT gates!")

@@ -33,14 +33,16 @@ description = "Compiles given qasm files or those in the given folder to a given
 
 import argparse
 
-
+# 用于将命令行字符串解析为Python对象的对象
+# prog-程序的名称（默认：sys.argv [0]）
+# description-程序功能的描述
 parser = argparse.ArgumentParser(prog="pyzx mapper", description=description)
-parser.add_argument("QASM_source", nargs='+', help="The QASM file or folder with QASM files to be routed.")  
+parser.add_argument("QASM_source", nargs='+', help="The QASM file or folder with QASM files to be routed.")  # 用来映射的QASM文件或存有QASM文件的文件夹
 parser.add_argument("-m", "--mode", nargs='+', dest="mode", default=STEINER_MODE,
                     help="The mode specifying how to route. choose 'all' for using all modes.",
                     choices=elim_modes + [QUIL_COMPILER, "all"])
 parser.add_argument("-a", "--architecture", nargs='+', dest="architecture", default=SQUARE, choices=architectures,
-                    help="Which architecture it should run compile to.")  
+                    help="Which architecture it should run compile to.")  # 默认架构: SQUARE
 parser.add_argument("-q", "--qubits", nargs='+', default=None, type=int,
                     help="The number of qubits for the fully connected architecture.")
 # parser.add_argument("-f", "--full_reduce", dest="full_reduce", default=1, type=int, choices=[0,1], help="Full reduce")
@@ -54,10 +56,10 @@ parser.add_argument("--mutation_prob", nargs='+', default=0.2, type=restricted_f
                     help="The mutation probability for the genetic algorithm. Must be between 0.0 and 1.0.")
 parser.add_argument("--perm", default="both", choices=["row", "col", "both"], help="Whether to find a single optimal permutation that permutes the rows, columns or both with the genetic algorithm.")
 parser.add_argument("--destination",
-                    help="Destination file or folder where the compiled circuit should be stored. Otherwise the source folder is used.")  
+                    help="Destination file or folder where the compiled circuit should be stored. Otherwise the source folder is used.")  # 应在其中存储已编译电路的目标文件或文件夹。否则，将使用源文件夹
 parser.add_argument("--metrics_csv", default=None,
                     help="The location to store compiling metrics as csv, if not given, the metrics are not calculated. Only used when the source is a folder")
-
+# 将编译度量存储为csv的位置，如果没有给出，则不计算度量。只在源为文件夹时使用
 parser.add_argument("--n_compile", default=1, type=int,
                     help="How often to run the Quilc compiler, since it is not deterministic.")
 parser.add_argument("--subfolder", default=None, type=str, nargs="+",
@@ -69,16 +71,18 @@ debug = False
 def main(args):
 
     debug and print("cont2cnot_args:", args)
+    # print("测试ipython是否可以动态保存")
 
     args = parser.parse_args(args)
 
     if args.metrics_csv is not None and os.path.exists(args.metrics_csv):
 
+        # print("executed")  #没有执行到
         delete_csv = None
         text = input(
             "The given metrics file [%s] already exists. Do you want to overwrite it? (Otherwise it is appended) [y|n]" % args.metrics_csv)
 
-        if text.lower() in ['y', "yes"]:  
+        if text.lower() in ['y', "yes"]:  # 转换字符串中所有大写字符为小写。
             delete_csv = True
         elif text.lower() in ['n', 'no']:
             delete_csv = False
@@ -92,19 +96,20 @@ def main(args):
 
         if delete_csv:
             os.remove(args.metrics_csv)
-            
+            # 删除指定路径的文件。如果指定的路径是一个目录，将抛出OSError。
 
-    debug and print(args.QASM_source)  
+    debug and print(args.QASM_source)  #['QASM_source', 'testdata']
     # print(type(args.QASM_source))
-    sources = make_into_list(args.QASM_source)  
+    sources = make_into_list(args.QASM_source)  # 将args.QASM_source表示成列表
     # print(sources)
 
-    if args.subfolder is not None:  
-        sources = [os.path.join(source, subfolder) for source in sources for subfolder in args.subfolder if os.path.isdir(source)]  
+    if args.subfolder is not None:  # 未执行到，源数据含有子文件夹
+        sources = [os.path.join(source, subfolder) for source in sources for subfolder in args.subfolder if os.path.isdir(source)]  # 列表解析
         # Remove non existing paths
 
     sources = [source for source in sources if
-               os.path.exists(source) or print("Warning, skipping non-existing source:", source)]  
+               os.path.exists(source) or print("Warning, skipping non-existing source:", source)]  # sources列表被清空
+    # os.path.exists()判断括号里的文件是否存在的意思，括号内的可以是文件路径,存在返回True
     debug and print("sources:", sources) #sources: ['testdata']
 
     debug and print("args.mode:", args.mode)  # args.mode: steiner
@@ -125,7 +130,8 @@ def main(args):
                                            n_compile=args.n_compile)
 
 
-        all_circuits.extend(circuits)  
+        all_circuits.extend(circuits)  # 将circuits列表中的内容添加到all_circuits末尾
 
-    return circuits
+    # 自行添加
+    # return circuits
 
