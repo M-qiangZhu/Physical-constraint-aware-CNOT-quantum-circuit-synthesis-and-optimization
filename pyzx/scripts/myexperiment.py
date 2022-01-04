@@ -86,28 +86,9 @@ def processor(architecture, gates, mode='steiner'):
 
 
 
-# 主函数
-# 记录需要遍历的架构
-tg_dict = {"9q_square": [3, 5, 10, 20, 30],
-           "16q_square": [4, 8, 16, 32, 64, 128, 256],
-           "rigetti_16q_aspen": [4, 8, 16, 32, 64, 128, 256],
-           "ibm_qx5": [4, 8, 16, 32, 64, 128, 256],
-           "ibm_q20_tokyo": [4, 8, 16, 32, 64, 128, 256]}
-
-# processor(architecture, gates)
-# 遍历字典的key, 遍历value值
-# for k in tg_dict:
-#     list_gates = tg_dict[k]
-#     architecture = k
-#     for gate in list_gates:
-#         gates = str(gate)
-#         processor(architecture, gates)
-#         print("*" * 120)
-
-
 if __name__ == '__main__':
 
-    # save parallel computing data
+    # save  computing data
     open("tokyo_parallel_result_conts.csv", 'w', encoding='utf-8').close()
     open("parallel_run_times.csv", 'w', encoding='utf-8').close()
     open("total_parallel_run_times.csv", 'w', encoding='utf-8').close()
