@@ -1,2 +1,9 @@
 # Physical constraint-aware CNOT quantum circuit synthesis and optimization
- steiner-simulator
+
+This project uses the weighted Steiner tree and matrix transformation method to optimize the synthesis of the CNOT circuit, thereby improving the fidelity of the circuit.
+ 
+ ## My work
+
+- The main function in /pyzx/scripts/my_experiment.py
+- Some functions and classes have been added and modified in /pyzx/routing/cnot-mapper.py
+- The experiment result in /pyzx/scripts/resultdata/
